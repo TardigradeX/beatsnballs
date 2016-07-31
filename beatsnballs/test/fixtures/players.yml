@@ -1,0 +1,8 @@
+<% 6.times do |i| %>
+<% 3.times do |n| %>
+player_<%= i %>_<%= n %>:
+  player_name: <%= "Example title #{i}/#{n}" %>
+  team: <%= "user_#{i}" %>
+  skill_level: <%= 1 + i + rand(3) %>
+<% end %>
+<% end %>
