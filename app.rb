@@ -24,6 +24,7 @@ class Player
   property :id, Serial, :key => true
   property :created_at, DateTime
   property :player_name, String, :length => 255
+
   belongs_to :team
 end
 
@@ -40,9 +41,12 @@ end
 # Route to show all Things, ordered like a blog
 get '/teams' do
   content_type :json
-  @things = Team.all(:order => :created_at.desc)
+  @teams = Team.all(:order => :created_at.desc)
+  @teams.each do |team|
+    puts team.players.inspect
+  end
   #@thing = Team.get(0)
-  @things.to_json(methods:[:players])
+  @teams.to_json(methods:[:players])
 end
 
 # CREATE: Route to create a new Thing
@@ -59,7 +63,7 @@ post '/teams' do
   @thing = Team.new(params_json)
 
   if @thing.save
-    @thing.to_json
+    @thing.to_json(methods:[:players])
   else
     halt 500
   end
@@ -111,12 +115,7 @@ end
 # If there are no Things in the database, add a few.
 if Team.count == 0
   team1 = Team.create(:team_name => "Winners")
-  team1.player = Player.create(player_name => "Helle")
-  team1.player = Player.create(player_name => "Franz")
+  team1.players << Player.create(:player_name => "Helle")
+  team1.players << Player.create(:player_name => "Franz")
   team1.save
-  team2 = Team.create(:team_name => "Losers")
-  team2.player = Player.create(player_name => "sala")
-  team2.player = Player.create(player_name => "gugu")
-  team2.player = Player.create(player_name => "daniel")
-  team2.save
 end
