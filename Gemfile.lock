@@ -57,14 +57,19 @@ GEM
     json (1.8.3)
     json_pure (1.8.3)
     multi_json (1.12.1)
+    power_assert (0.3.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    rack-test (0.6.3)
+      rack (>= 1.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
     stringex (1.5.1)
+    test-unit (3.2.1)
+      power_assert
     tilt (2.0.5)
     uuidtools (2.1.5)
 
@@ -76,7 +81,9 @@ DEPENDENCIES
   dm-serializer
   dm-sqlite-adapter
   json
+  rack-test
   sinatra
+  test-unit
 
 BUNDLED WITH
    1.12.5

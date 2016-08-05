@@ -3,18 +3,23 @@
 require 'bundler'
 Bundler.require
 
-# Setup DataMapper with a database URL. On Heroku, ENV['DATABASE_URL'] will be
-# set, when working locally this line will fall back to using SQLite in the
-# current directory.
-DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{Dir.pwd}/development.sqlite")
+set :environment, :development
 
-# Define a simple DataMapper model.
+if (ENV == 'production')
+  DataMapper.setup(:default, 'sqlite://#{Dir.pwd}/production.sqlite')
+else
+  DataMapper.setup(:default, 'sqlite::memory:')
+end
+
+#DATA Models
 class Team
   include DataMapper::Resource
 
   property :id, Serial, :key => true
   property :created_at, DateTime
   property :team_name, String, :length => 255
+  property :email, String
+  property :activated, Boolean, :default => false
 
   has n, :players
 end
@@ -69,37 +74,6 @@ post '/teams' do
   end
 end
 
-# READ: Route to show a specific Thing based on its `id`
-get '/things/:id' do
-  content_type :json
-  @thing = Team.get(params[:id].to_i)
-
-  if @thing
-    @thing.to_json
-  else
-    halt 404
-  end
-end
-
-# UPDATE: Route to update a Thing
-put '/things/:id' do
-  content_type :json
-
-  # These next commented lines are for if you are using Backbone.js
-  # JSON is sent in the body of the http request. We need to parse the body
-  # from a string into JSON
-  params_json = JSON.parse(request.body.read)
-
-  @thing = Team.get(params_json[:id].to_i)
-  @thing.update(params)
-
-  if @thing.save
-    @thing.to_json
-  else
-    halt 500
-  end
-end
-
 # DELETE: Route to delete a Thing
 delete '/things/:id/delete' do
   content_type :json
@@ -114,7 +88,7 @@ end
 
 # If there are no Things in the database, add a few.
 if Team.count == 0
-  team1 = Team.create(:team_name => "Winners")
+  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com")
   team1.players << Player.create(:player_name => "Helle")
   team1.players << Player.create(:player_name => "Franz")
   team1.save
