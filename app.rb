@@ -20,6 +20,7 @@ class Team
   property :team_name, String, :length => 255
   property :email, String
   property :activated, Boolean, :default => false
+  property :uuid, String
 
   has n, :players
 end
@@ -54,20 +55,16 @@ get '/teams' do
   @teams.to_json(methods:[:players])
 end
 
-# CREATE: Route to create a new Thing
+# CREATE: Route to create a new Team
 post '/teams' do
   content_type :json
 
-  # These next commented lines are for if you are using Backbone.js
-  # JSON is sent in the body of the http request. We need to parse the body
-  # from a string into JSON
   params_json = JSON.parse(request.body.read)
 
-  # If you are using jQuery's ajax functions, the data goes through in the
-  # params.
   @thing = Team.new(params_json)
 
   if @thing.save
+    response.status = 201
     @thing.to_json(methods:[:players])
   else
     halt 500
