@@ -1,6 +1,7 @@
 # Require the bundler gem and then call Bundler.require to load in all gems
 # listed in Gemfile.
 require 'bundler'
+require 'secret_constants'
 Bundler.require
 
 set :environment, :development
@@ -40,6 +41,22 @@ DataMapper.finalize
 # Tell DataMapper to update the database according to the definitions above.
 DataMapper.auto_upgrade!
 
+Pony.options = {
+    :subject => "Beats n Balls Anmeldung",
+    :body => erb(:email),
+    :via => :smtp,
+    :via_options => {
+        :address              => 'smtp.gmail.com',
+        :port                 => '587',
+        :enable_starttls_auto => true,
+        :user_name            => SecretConstants.MAIL_USER,
+        :password             => SecretConstants.MAIL_PASSWORD,
+        :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
+        :domain               => "localhost.localdomain"
+    }
+}
+
+
 get '/' do
   send_file './public/index.html'
 end
@@ -61,22 +78,22 @@ post '/teams' do
 
   params_json = JSON.parse(request.body.read)
 
-  @thing = Team.new(params_json)
+  @team = Team.new(params_json)
 
-  if @thing.save
+  if @team.save
     response.status = 201
-    @thing.to_json(methods:[:players])
+    @team.to_json(methods:[:players])
   else
     halt 500
   end
 end
 
-# DELETE: Route to delete a Thing
-delete '/things/:id/delete' do
+# DELETE: Route to delete a Team
+delete '/teams/:id' do
   content_type :json
-  @thing = Team.get(params[:id].to_i)
+  @team = Team.get(params[:id].to_i)
 
-  if @thing.destroy
+  if @team.destroy
     {:success => "ok"}.to_json
   else
     halt 500
