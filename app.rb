@@ -1,7 +1,7 @@
 # Require the bundler gem and then call Bundler.require to load in all gems
 # listed in Gemfile.
 require 'bundler'
-require 'secret_constants'
+require './secret_constants'
 Bundler.require
 
 set :environment, :development
@@ -42,17 +42,15 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 Pony.options = {
-    :subject => "Beats n Balls Anmeldung",
-    :body => erb(:email),
     :via => :smtp,
     :via_options => {
-        :address              => 'smtp.gmail.com',
+        :address              => 'smtp.mail.de',
         :port                 => '587',
         :enable_starttls_auto => true,
-        :user_name            => SecretConstants.MAIL_USER,
-        :password             => SecretConstants.MAIL_PASSWORD,
+        :headers => { 'Content-Type' => 'text/html' },
+        :user_name            => SecretConstants::MAIL_USER,
+        :password             => SecretConstants::MAIL_PASSWORD,
         :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
-        :domain               => "localhost.localdomain"
     }
 }
 
@@ -77,8 +75,15 @@ post '/teams' do
   content_type :json
 
   params_json = JSON.parse(request.body.read)
-
   @team = Team.new(params_json)
+
+  email_body = erb :mail, :locals => {name:@team.team_name, regURI: "https://www.google.de", delURI:"http://www.w3schools.com"}
+
+  Pony.mail :to => "daniel@family-xander.de",
+            :from => "beatsnballs@mail.de",
+            :subject => "Beats n Balls Registrierung",
+            :html_body => email_body
+
 
   if @team.save
     response.status = 201
