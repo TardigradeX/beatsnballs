@@ -24,7 +24,7 @@ class Team
   property :uuid, String
   property :rank, Integer
 
-  has n, :players
+  has n, :players, :constraint => :destroy
 end
 
 class Player
@@ -100,9 +100,19 @@ end
 # DELETE: Route to delete a Team
 delete '/teams/:id' do
   content_type :json
-  @team = Team.get(params[:id].to_i)
+  @team = Team.get(params[:id])
 
-  if @team.destroy
+  params_json = JSON.parse(request.body.read)
+
+  if params_json['uuid'] == @team.uuid
+    @distroyd = @team.destroy
+    puts "isDistroid"
+    puts @distroyd
+  else
+    @destroyd = false
+  end
+
+  if @destroyd
     {:success => "ok"}.to_json
   else
     halt 500
@@ -111,7 +121,7 @@ end
 
 # If there are no Things in the database, add a few.
 if Team.count == 0
-  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com")
+  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid =>"testuuid")
   team1.players << Player.create(:player_name => "Helle")
   team1.players << Player.create(:player_name => "Franz")
   team1.save

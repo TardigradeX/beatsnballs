@@ -11,6 +11,11 @@ class TestTeam < Test::Unit::TestCase
     browser.get '/teams'
     assert browser.last_response.ok?
     assert browser.last_response.body.include?('Winners')
+
+    browser = Rack::Test::Session.new(Rack::MockSession.new(Sinatra::Application))
+    data = '{"uuid":"testuuid"}'
+    browser.delete '/teams/1', data
+    assert browser.last_response.body.include?('ok')
   end
 
   def test_can_post_new_team
