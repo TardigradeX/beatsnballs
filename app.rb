@@ -22,6 +22,7 @@ class Team
   property :email, String
   property :activated, Boolean, :default => false
   property :uuid, String
+  property :rank, Integer
 
   has n, :players
 end
@@ -59,15 +60,13 @@ get '/' do
   send_file './public/index.html'
 end
 
-# Route to show all Things, ordered like a blog
 get '/teams' do
   content_type :json
   @teams = Team.all(:order => :created_at.desc)
   @teams.each do |team|
     puts team.players.inspect
   end
-  #@thing = Team.get(0)
-  @teams.to_json(methods:[:players])
+  @teams.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
 end
 
 # CREATE: Route to create a new Team
@@ -77,17 +76,22 @@ post '/teams' do
   params_json = JSON.parse(request.body.read)
   @team = Team.new(params_json)
 
+  newID = SecureRandom.hex(10);
+  @team.uuid = newID;
+
   email_body = erb :mail, :locals => {name:@team.team_name, regURI: "https://www.google.de", delURI:"http://www.w3schools.com"}
 
-  Pony.mail :to => "daniel@family-xander.de",
-            :from => "beatsnballs@mail.de",
-            :subject => "Beats n Balls Registrierung",
-            :html_body => email_body
-
-
   if @team.save
+
+=begin
+    Pony.mail :to => "daniel@family-xander.de",
+              :from => "beatsnballs@mail.de",
+              :subject => "Beats n Balls Registrierung",
+              :html_body => email_body
+=end
+
     response.status = 201
-    @team.to_json(methods:[:players])
+    @team.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
   else
     halt 500
   end

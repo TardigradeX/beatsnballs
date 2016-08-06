@@ -19,7 +19,6 @@ class TestTeam < Test::Unit::TestCase
     browser.post '/teams', data
     assert browser.last_response.created?
     assert browser.last_response.body.include?('Losers')
-    assert browser.last_response.body.include?('test@ultra.com')
     assert browser.last_response.body.include?('lolo')
   end
 
