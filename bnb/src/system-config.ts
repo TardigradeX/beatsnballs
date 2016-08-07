@@ -48,6 +48,7 @@ const barrels: string[] = [
   'app/shared/navbar',
   'app/teams',
   'app/ranks',
+  'app/registration',
   /** @cli-barrel */
 ];
 
