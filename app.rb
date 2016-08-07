@@ -6,6 +6,10 @@ Bundler.require
 
 set :environment, :development
 
+configure do
+  enable :cross_origin
+end
+
 if (ENV == 'production')
   DataMapper.setup(:default, 'sqlite://#{Dir.pwd}/production.sqlite')
 else
