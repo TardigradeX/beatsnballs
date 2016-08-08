@@ -8,18 +8,20 @@
     list-style: none;
 }
 #accordion h2{
+    border-radius: 6px;
     font-size: 12pt;
     margin: 0px;
     padding: 10px;
-    background: #ccc;
-    border-bottom: 1px solid #fff;
+    background: #42cafd;
+    border: 1px solid #f6efa6;
 }
 #accordion li div.content{
     display: none;
     padding: 10px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
+    background:#66b3ba;
+    border: 1px solid #f6efa6;
 }
 #accordion li:hover div.content{
+    border-radius: 6px;
     display: inherit;
 }
