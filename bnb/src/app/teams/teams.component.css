@@ -1,3 +1,29 @@
 .barspace {
-  margin-top: 80px;
+    margin-top: 80px;
+}
+#accordion{
+    width: 400px;
+    margin: 0px;
+    padding: 3px;
+    list-style: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#accordion h2{
+    border-radius: 6px;
+    font-size: 12pt;
+    margin: 1px;
+    padding: 10px;
+    background: #eae7dc;
+    border: 2px solid #66b3ba;
+}
+#accordion li div.content{
+    display: none;
+    padding: 10px;
+    background: #f6efa6;
+    border: 1px solid #42cafd;
+}
+#accordion li:hover div.content{
+    border-radius: 6px;
+    display: inherit;
 }
