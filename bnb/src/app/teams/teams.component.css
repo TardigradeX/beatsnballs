@@ -1,5 +1,5 @@
 .barspace {
-  margin-top: 80px;
+    margin-top: 80px;
 }
 #accordion{
     width: 600px;
@@ -24,4 +24,20 @@
 #accordion li:hover div.content{
     border-radius: 6px;
     display: inherit;
+}
+h2 {
+  animation-duration: 1.5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
 }
