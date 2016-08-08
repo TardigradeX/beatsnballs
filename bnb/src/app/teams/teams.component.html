@@ -1,15 +1,12 @@
 <div class="barspace">
   <div class="container">
     <div *ngFor="let team of loadedTeams">
-      <button class="accordion">{{team.team_name}}</button>
-      <div class="panel">
-        <p>test</p>
-      </div>
-      <ul>
-        <div *ngFor="let player of team.players">
-          <li> {{player.player_name}} </li>
-        </div>
-      </ul>
+      {{team.team_name}}
+        <ul>
+          <div *ngFor="let player of team.players">
+            <li> {{player.player_name}} </li>
+          </div>
+        </ul>
     </div>
   </div>
 </div>
