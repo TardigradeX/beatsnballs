@@ -104,19 +104,19 @@ delete '/teams/:id' do
 
   params_json = JSON.parse(request.body.read)
 
+  @dead = false
+
   if params_json['uuid'] == @team.uuid
-    @distroyd = @team.destroy
-    puts "isDistroid"
-    puts @distroyd
-  else
-    @destroyd = false
+    @dead = @team.destroy
   end
 
-  if @destroyd
+  if @dead
+    response.status = 200
     {:success => "ok"}.to_json
   else
     halt 500
   end
+
 end
 
 # If there are no Things in the database, add a few.

@@ -1,0 +1,16 @@
+.navbar-custom {
+  background-color:#eae7dc;
+  color:#42cafd;
+  border-radius:0;
+}
+
+.navbar-custom .navbar-nav > li > a {
+  color:#66b3ba;
+}
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+  color: #42cafd;
+  background-color:transparent;
+}
+.navbar-custom .navbar-brand {
+  color:#66b3ba;
+}
