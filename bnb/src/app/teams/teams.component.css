@@ -2,9 +2,9 @@
     margin-top: 80px;
 }
 #accordion{
-    width: 600px;
+    width: 200px;
     margin: 0px;
-    padding: 0px;
+    padding: 3px;
     list-style: none;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -12,7 +12,7 @@
 #accordion h2{
     border-radius: 6px;
     font-size: 12pt;
-    margin: 0px;
+    margin: 1px;
     padding: 10px;
     background: #eae7dc;
     border: 2px solid #66b3ba;
@@ -26,20 +26,4 @@
 #accordion li:hover div.content{
     border-radius: 6px;
     display: inherit;
-}
-h2 {
-  animation-duration: 1.5s;
-  animation-name: slidein;
-}
-
-@keyframes slidein {
-  from {
-    margin-left: 100%;
-    width: 300%;
-  }
-
-  to {
-    margin-left: 0%;
-    width: 100%;
-  }
 }
