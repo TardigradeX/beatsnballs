@@ -120,8 +120,32 @@ delete '/teams/:id' do
   else
     halt 500
   end
+end
+
+
+
+# PUT: Activate a Team
+put '/teams/:id' do
+  content_type :json
+  @team = Team.get(params[:id])
+
+  params_json = JSON.parse(request.body.read)
+
+
+  if params_json['uuid'] == @team.uuid
+    @team.activated = true;
+  end
+
+  if @team.activated and @team.save
+    response.status = 200
+    @team.to_json(:only => [:team_name, :created_at, :rank, :activated], methods:[:players])
+  else
+    halt 500
+  end
 
 end
+
+
 
 # If there are no Things in the database, add a few.
 if Team.count == 0

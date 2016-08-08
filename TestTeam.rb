@@ -14,6 +14,13 @@ class TestTeam < Test::Unit::TestCase
 
     browser = Rack::Test::Session.new(Rack::MockSession.new(Sinatra::Application))
     data = '{"uuid":"testuuid"}'
+    browser.put '/teams/1', data
+    assert browser.last_response.ok?
+    assert browser.last_response.body.include?('activated')
+
+
+    browser = Rack::Test::Session.new(Rack::MockSession.new(Sinatra::Application))
+    data = '{"uuid":"testuuid"}'
     browser.delete '/teams/1', data
     assert browser.last_response.ok?
   end
