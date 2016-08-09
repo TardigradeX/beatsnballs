@@ -1,5 +1,0 @@
-export enum ActivationStates {
-  ACTIVATION_PENDING,
-  ACTIVATION_SUCCESSFUL,
-  ACTIVATION_DENIED
-}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { ROUTER_DIRECTIVES, ActivatedRoute } from '@angular/router';
 
@@ -8,12 +9,12 @@ import { UUIDDto } from '../shared/uuid.dto';
 
 @Component({
   moduleId: module.id,
-  selector: 'app-acivated',
-  templateUrl: 'activated.component.html',
-  styleUrls: ['activated.component.css'],
+  selector: 'app-delete',
+  templateUrl: 'delete.component.html',
+  styleUrls: ['delete.component.css'],
   directives: [ROUTER_DIRECTIVES]
 })
-export class ActivatedComponent implements OnInit {
+export class DeleteComponent implements OnInit {
   public activatedStates = ActivationStates;
   private currentState = ActivationStates.ASYNC_PENDING;
   private uuid: string;
@@ -37,7 +38,7 @@ export class ActivatedComponent implements OnInit {
     let body = JSON.stringify(new UUIDDto(this.uuid));
     console.log(this.uuid);
     console.log(this.id);
-    this.http.put(environment.API_ENDPOINT + '/teams/' + this.id, body, { headers: headers })
+    this.http.delete(environment.API_ENDPOINT + '/teams/' + this.id, body, { headers: headers })
       .subscribe(
         response => {
           this.currentState = ActivationStates.ASYNC_SUCCESSFUL;

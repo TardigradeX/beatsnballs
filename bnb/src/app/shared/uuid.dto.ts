@@ -1,7 +1,7 @@
 /**
  * Created by daniel on 08.08.16.
  */
-export class ActivationDto {
+export class UUIDDto {
   private uuid: string;
 
   constructor(key: string) {
