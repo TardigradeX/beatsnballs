@@ -9,22 +9,22 @@ import { ActivationDto } from './activation.dto';
 @Component({
   moduleId: module.id,
   selector: 'app-acivated',
-  templateUrl: 'acivated.component.html',
-  styleUrls: ['acivated.component.css']
+  templateUrl: 'activated.component.html',
+  styleUrls: ['activated.component.css'],
+  directives: [ROUTER_DIRECTIVES]
 })
-export class AcivatedComponent implements OnInit {
+export class ActivatedComponent implements OnInit {
   public activatedStates = ActivationStates;
   private currentState = ActivationStates.ACTIVATION_PENDING;
-  private uuid;
-  private id;
+  private uuid: string;
+  private id: string;
   private sub: any;
 
   constructor(private route: ActivatedRoute, public http: Http){
   }
 
-  constructor() { }
-
   ngOnInit() {
+
     this.sub = this.route
       .params
       .subscribe(params => {
@@ -35,6 +35,8 @@ export class AcivatedComponent implements OnInit {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let body = JSON.stringify(new ActivationDto(this.uuid));
+    console.log(this.uuid);
+    console.log(this.id);
     this.http.put(environment.API_ENDPOINT + '/teams/' + this.id, body, { headers: headers })
       .subscribe(
         response => {

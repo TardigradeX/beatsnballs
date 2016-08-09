@@ -6,6 +6,10 @@ Bundler.require
 
 set :environment, :development
 
+set :allow_origin, :any
+set :allow_methods, [:get, :post, :options, :put]
+set :expose_headers, ['Content-Type']
+
 configure do
   enable :cross_origin
 end
@@ -59,6 +63,10 @@ Pony.options = {
     }
 }
 
+before '/*' do
+# return directly with 200 if request method is options
+  halt 200 if request.request_method == 'OPTIONS'
+end
 
 get '/' do
   send_file './public/index.html'
@@ -66,7 +74,7 @@ end
 
 get '/teams' do
   content_type :json
-  @teams = Team.all(:order => :created_at.desc)
+  @teams = Team.all(:order => :created_at.desc, :activated => true)
   @teams.each do |team|
     puts team.players.inspect
   end
@@ -80,19 +88,25 @@ post '/teams' do
   params_json = JSON.parse(request.body.read)
   @team = Team.new(params_json)
 
-  newID = SecureRandom.hex(10);
-  @team.uuid = newID;
-
-  email_body = erb :mail, :locals => {name:@team.team_name, regURI: "https://www.google.de", delURI:"http://www.w3schools.com"}
+  newID = SecureRandom.hex(10)
+  @team.uuid = newID
 
   if @team.save
 
-=begin
-    Pony.mail :to => "daniel@family-xander.de",
+    @registerURL = SecretConstants::ANGULAR_SERVER  + "/activation;uuid="  + @team.uuid + ";id=" + @team.id.to_s
+
+    @deleteURL = SecretConstants::ANGULAR_SERVER  + "/delete;uuid="  + @team.uuid + ";id="  + @team.id.to_s
+
+    puts @registerURL
+    puts @deleteURL
+
+    email_body = erb :mail, :locals => {name:@team.team_name, regURI: @registerURL, delURI:@deleteURL}
+
+    Pony.mail :to => "daniel.xander@fhnw.ch",
               :from => "beatsnballs@mail.de",
               :subject => "Beats n Balls Registrierung",
               :html_body => email_body
-=end
+
 
     response.status = 201
     @team.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
@@ -146,10 +160,9 @@ put '/teams/:id' do
 end
 
 
-
 # If there are no Things in the database, add a few.
 if Team.count == 0
-  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid =>"testuuid")
+  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid =>"testuuid", :activated => true)
   team1.players << Player.create(:player_name => "Helle")
   team1.players << Player.create(:player_name => "Franz")
   team1.save
