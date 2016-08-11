@@ -1,3 +1,15 @@
 <div class="container" style="margin-top: 80px;" >
-ACTIVATION
+  <div *ngIf="currentState == asyncStates.ASYNC_PENDING">
+    <h1>Fische Behandeln deine Registrierung.</h1>
+  </div>
+
+  <div *ngIf="currentState == asyncStates.ASYNC_SUCCESSFUL">
+    <h1>Ihr seit Registiert. Geht zu den <a routerLink="/teams" class="link">teams</a> </h1>
+  </div>
+
+  <div *ngIf="currentState == asyncStates.ASYNC_ERROR">
+    <h1>Da Ging was schief. Daniel ist auf keinen fall Schuld.</h1>
+    <h1>Schau erst auf die Teamlist. Wenn ihr nicht dort seit, drück den link noch einmal.</h1>
+    <h1>Falls es immer noch nicht geht, schreib ne mail an <b>beatsnballs@mail.de</b></h1>
+  </div>
 </div>

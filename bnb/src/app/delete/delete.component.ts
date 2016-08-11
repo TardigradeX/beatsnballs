@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { ROUTER_DIRECTIVES, ActivatedRoute } from '@angular/router';
 
-import {ActivationStates } from '../shared/async.states';
+import {AsyncStates } from '../shared/async.states';
 import { environment } from '../environment';
-import { UUIDDto } from '../shared/uuid.dto';
 
 @Component({
   moduleId: module.id,
@@ -14,9 +12,10 @@ import { UUIDDto } from '../shared/uuid.dto';
   styleUrls: ['delete.component.css'],
   directives: [ROUTER_DIRECTIVES]
 })
+
 export class DeleteComponent implements OnInit {
-  public activatedStates = ActivationStates;
-  private currentState = ActivationStates.ASYNC_PENDING;
+  public asyncStates = AsyncStates;
+  private currentState = AsyncStates.ASYNC_PENDING;
   private uuid: string;
   private id: string;
   private sub: any;
@@ -35,16 +34,14 @@ export class DeleteComponent implements OnInit {
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let body = JSON.stringify(new UUIDDto(this.uuid));
-    console.log(this.uuid);
-    console.log(this.id);
-    this.http.delete(environment.API_ENDPOINT + '/teams/' + this.id, body, { headers: headers })
+    headers.append('uuid', this.uuid);
+    this.http.delete(environment.API_ENDPOINT + '/teams/' + this.id, { headers: headers })
       .subscribe(
         response => {
-          this.currentState = ActivationStates.ASYNC_SUCCESSFUL;
+          this.currentState = AsyncStates.ASYNC_SUCCESSFUL;
         },
         error => {
-          this.currentState = ActivationStates.ASYNC_ERROR;
+          this.currentState = AsyncStates.ASYNC_ERROR;
         }
       );
   }

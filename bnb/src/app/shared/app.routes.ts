@@ -3,6 +3,7 @@ import { TeamsComponent } from '../teams/teams.component';
 import { RanksComponent } from '../ranks/ranks.component';
 import { RegistrationComponent } from '../registration/registration.component';
 import { ActivatedComponent } from '../activated/activated.component';
+import { DeleteComponent } from '../delete/delete.component';
 
 export const APP_ROUTES: RouterConfig = [
 
@@ -10,7 +11,8 @@ export const APP_ROUTES: RouterConfig = [
   {path: 'teams', component: TeamsComponent},
   {path: 'ranks', component: RanksComponent},
   {path: 'registration', component: RegistrationComponent},
-  {path: 'activation', component: ActivatedComponent}
+  {path: 'activation', component: ActivatedComponent},
+  {path: 'delete', component: DeleteComponent}
 
 ];
 

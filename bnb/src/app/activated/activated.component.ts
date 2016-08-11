@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { ROUTER_DIRECTIVES, ActivatedRoute } from '@angular/router';
 
-import {ActivationStates } from '../shared/async.states';
+import {AsyncStates } from '../shared/async.states';
 import { environment } from '../environment';
 import { UUIDDto } from '../shared/uuid.dto';
 
@@ -14,8 +14,8 @@ import { UUIDDto } from '../shared/uuid.dto';
   directives: [ROUTER_DIRECTIVES]
 })
 export class ActivatedComponent implements OnInit {
-  public activatedStates = ActivationStates;
-  private currentState = ActivationStates.ASYNC_PENDING;
+  public asyncStates = AsyncStates;
+  private currentState = AsyncStates.ASYNC_PENDING;
   private uuid: string;
   private id: string;
   private sub: any;
@@ -40,10 +40,10 @@ export class ActivatedComponent implements OnInit {
     this.http.put(environment.API_ENDPOINT + '/teams/' + this.id, body, { headers: headers })
       .subscribe(
         response => {
-          this.currentState = ActivationStates.ASYNC_SUCCESSFUL;
+          this.currentState = AsyncStates.ASYNC_SUCCESSFUL;
         },
         error => {
-          this.currentState = ActivationStates.ASYNC_ERROR;
+          this.currentState = AsyncStates.ASYNC_ERROR;
         }
       );
   }

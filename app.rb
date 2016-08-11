@@ -7,8 +7,8 @@ Bundler.require
 set :environment, :development
 
 set :allow_origin, :any
-set :allow_methods, [:get, :post, :options, :put]
-set :expose_headers, ['Content-Type']
+set :allow_methods, [:get, :post, :options, :put, :delete]
+set :expose_headers, ['Content-Type', 'uuid']
 
 configure do
   enable :cross_origin
@@ -63,9 +63,19 @@ Pony.options = {
     }
 }
 
+=begin
 before '/*' do
 # return directly with 200 if request method is options
   halt 200 if request.request_method == 'OPTIONS'
+end
+=end
+
+options "/*" do
+  response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
+
+  response.headers["Access-Control-Allow-Headers"] = "uuid, Content-Type, Cache-Control, Accept,Access-Control-Allow-Origin"
+
+  200
 end
 
 get '/' do
@@ -97,12 +107,9 @@ post '/teams' do
 
     @deleteURL = SecretConstants::ANGULAR_SERVER  + "/delete;uuid="  + @team.uuid + ";id="  + @team.id.to_s
 
-    puts @registerURL
-    puts @deleteURL
-
     email_body = erb :mail, :locals => {name:@team.team_name, regURI: @registerURL, delURI:@deleteURL}
 
-    Pony.mail :to => "daniel.xander@fhnw.ch",
+    Pony.mail :to => @team.email,
               :from => "beatsnballs@mail.de",
               :subject => "Beats n Balls Registrierung",
               :html_body => email_body
@@ -120,11 +127,9 @@ delete '/teams/:id' do
   content_type :json
   @team = Team.get(params[:id])
 
-  params_json = JSON.parse(request.body.read)
-
   @dead = false
 
-  if params_json['uuid'] == @team.uuid
+  if env['HTTP_UUID'] == @team.uuid
     @dead = @team.destroy
   end
 

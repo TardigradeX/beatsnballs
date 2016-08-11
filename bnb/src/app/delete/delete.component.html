@@ -1,3 +1,15 @@
-<p>
-  delete works!
-</p>
+<div class="container" style="margin-top: 80px;">
+  <div *ngIf="currentState == asyncStates.ASYNC_PENDING">
+    <h1>Affen löschen dein Team Gerade vom Server.</h1>
+  </div>
+
+  <div *ngIf="currentState == asyncStates.ASYNC_SUCCESSFUL">
+    <h1>Dein Team ist raus und du nicht mehr unser Freund.</h1>
+  </div>
+
+  <div *ngIf="currentState == asyncStates.ASYNC_ERROR">
+    <h1>Da Ging was schief. Schau in der Teamansicht ob dein Team gelöscht wurde</h1>
+    <h1>Falls nicht, schreib ne mail an <b>beatsnballs@mail.de</b></h1>
+  </div>
+</div>
+

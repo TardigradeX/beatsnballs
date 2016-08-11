@@ -20,7 +20,8 @@ class TestTeam < Test::Unit::TestCase
     assert browser.last_response.body.include?('activated')
 
     browser = Rack::Test::Session.new(Rack::MockSession.new(Sinatra::Application))
-    browser.delete '/teams/1', data
+    browser.header 'uuid', 'testuuid'
+    browser.delete '/teams/1'
     assert browser.last_response.ok?
   end
 
