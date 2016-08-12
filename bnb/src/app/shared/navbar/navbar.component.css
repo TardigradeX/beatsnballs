@@ -1,6 +1,6 @@
 .navbar-custom {
   background-color:#eae7dc;
-  color:#42cafd;
+  color:#66b3ba;
   border-radius:0;
 }
 
@@ -8,7 +8,7 @@
   color:#66b3ba;
 }
 .navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
-  color: #42cafd;
+  color: #66b3ba;
   background-color:transparent;
 }
 .navbar-custom .navbar-brand {

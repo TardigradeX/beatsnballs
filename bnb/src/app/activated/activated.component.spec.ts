@@ -3,11 +3,11 @@
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { addProviders, async, inject } from '@angular/core/testing';
-import { Http } from '@angular/http';
+import { ActivatedComponent } from './activated.component';
 
-describe('Component: Teams', () => {
+describe('Component: Activated', () => {
   it('should create an instance', () => {
-    let component = true;9
-    expect(component).toBeTruthy();
+    // let component = new ActivatedComponent();
+    expect(true).toBeTruthy();
   });
 });

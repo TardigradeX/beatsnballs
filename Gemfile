@@ -9,3 +9,5 @@ gem 'dm-sqlite-adapter'
 gem 'test-unit'
 gem 'pony'
 
+gem 'sinatra-cross_origin'
+

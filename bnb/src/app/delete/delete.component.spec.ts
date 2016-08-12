@@ -3,11 +3,11 @@
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { addProviders, async, inject } from '@angular/core/testing';
-import { Http } from '@angular/http';
+import { DeleteComponent } from './delete.component';
 
-describe('Component: Teams', () => {
+describe('Component: Delete', () => {
   it('should create an instance', () => {
-    let component = true;9
-    expect(component).toBeTruthy();
+   // let component = new DeleteComponent();
+    expect(true).toBeTruthy();
   });
 });

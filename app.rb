@@ -6,6 +6,14 @@ Bundler.require
 
 set :environment, :development
 
+set :allow_origin, :any
+set :allow_methods, [:get, :post, :options, :put, :delete]
+set :expose_headers, ['Content-Type', 'uuid']
+
+configure do
+  enable :cross_origin
+end
+
 if (ENV == 'production')
   DataMapper.setup(:default, 'sqlite://#{Dir.pwd}/production.sqlite')
 else
@@ -55,6 +63,20 @@ Pony.options = {
     }
 }
 
+=begin
+before '/*' do
+# return directly with 200 if request method is options
+  halt 200 if request.request_method == 'OPTIONS'
+end
+=end
+
+options "/*" do
+  response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
+
+  response.headers["Access-Control-Allow-Headers"] = "uuid, Content-Type, Cache-Control, Accept,Access-Control-Allow-Origin"
+
+  200
+end
 
 get '/' do
   send_file './public/index.html'
@@ -62,7 +84,7 @@ end
 
 get '/teams' do
   content_type :json
-  @teams = Team.all(:order => :created_at.desc)
+  @teams = Team.all(:order => :created_at.desc, :activated => true)
   @teams.each do |team|
     puts team.players.inspect
   end
@@ -76,19 +98,22 @@ post '/teams' do
   params_json = JSON.parse(request.body.read)
   @team = Team.new(params_json)
 
-  newID = SecureRandom.hex(10);
-  @team.uuid = newID;
-
-  email_body = erb :mail, :locals => {name:@team.team_name, regURI: "https://www.google.de", delURI:"http://www.w3schools.com"}
+  newID = SecureRandom.hex(10)
+  @team.uuid = newID
 
   if @team.save
 
-=begin
-    Pony.mail :to => "daniel@family-xander.de",
+    @registerURL = SecretConstants::ANGULAR_SERVER  + "/activation;uuid="  + @team.uuid + ";id=" + @team.id.to_s
+
+    @deleteURL = SecretConstants::ANGULAR_SERVER  + "/delete;uuid="  + @team.uuid + ";id="  + @team.id.to_s
+
+    email_body = erb :mail, :locals => {name:@team.team_name, regURI: @registerURL, delURI:@deleteURL}
+
+    Pony.mail :to => @team.email,
               :from => "beatsnballs@mail.de",
               :subject => "Beats n Balls Registrierung",
               :html_body => email_body
-=end
+
 
     response.status = 201
     @team.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
@@ -102,11 +127,9 @@ delete '/teams/:id' do
   content_type :json
   @team = Team.get(params[:id])
 
-  params_json = JSON.parse(request.body.read)
-
   @dead = false
 
-  if params_json['uuid'] == @team.uuid
+  if env['HTTP_UUID'] == @team.uuid
     @dead = @team.destroy
   end
 
@@ -116,12 +139,35 @@ delete '/teams/:id' do
   else
     halt 500
   end
+end
+
+
+
+# PUT: Activate a Team
+put '/teams/:id' do
+  content_type :json
+  @team = Team.get(params[:id])
+
+  params_json = JSON.parse(request.body.read)
+
+
+  if params_json['uuid'] == @team.uuid
+    @team.activated = true;
+  end
+
+  if @team.activated and @team.save
+    response.status = 200
+    @team.to_json(:only => [:team_name, :created_at, :rank, :activated], methods:[:players])
+  else
+    halt 500
+  end
 
 end
 
+
 # If there are no Things in the database, add a few.
 if Team.count == 0
-  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid =>"testuuid")
+  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid =>"testuuid", :activated => true)
   team1.players << Player.create(:player_name => "Helle")
   team1.players << Player.create(:player_name => "Franz")
   team1.save
