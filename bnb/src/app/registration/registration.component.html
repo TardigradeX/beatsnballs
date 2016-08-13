@@ -1,8 +1,73 @@
 <div class="barspace">
   <div class="container">
-    <p>
-      registration works!
-    </p>
+      <div class="MyFont">
+        <div *ngIf="currentState == asyncStates.NONE">
+          <h1>Beats'n Balls Anmeldung:</h1>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+
+            <fieldset class="form-group"
+                      [ngClass]="{'has-error':!form.controls.team_name.valid && form.controls.team_name.touched}">
+              <label for="TeamName">Name des Teams: </label>
+              <input type="text" formControlName="team_name" class="form-control" id="TeamName" placeholder="Mein Team"
+                     login='ngModel' [formControl]="form.controls['team_name']">
+              <div *ngIf="!form.controls.team_name.valid && form.controls.team_name.touched" class="has-error">
+                <span class="help-block">Der Name muss mindestens 4 Buchstaben haben. </span>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      [ngClass]="{'has-error':!form.controls.email.valid && form.controls.email.touched}">
+              <label for="emailId"> Email:* </label>
+              <input type="email" formControlName="email" class="form-control" id="emailId" placeholder="Email">
+              <div *ngIf="!form.controls.email.valid && form.controls.email.touched" class="has-error">
+                <span class="help-block">Bitte Gebe eine Korrekte Email-Adresse ein.</span>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      [ngClass]="{'has-error':!form.controls.playerOne.valid && form.controls.playerOne.touched}">
+              <label for="playerId">Spieler 1:*</label>
+              <input type="text" formControlName="playerOne" class="form-control" id="playerId" placeholder="Spieler 1">
+              <div *ngIf="!form.controls.playerOne.valid && form.controls.playerOne.touched" class="has-error">
+                <span class="help-block">Der Spielername muss mindestens 3 Buchstaben haben.</span>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      [ngClass]="{'has-error':!form.controls.playerTwo.valid && form.controls.playerTwo.touched}">
+              <label for="playerId2">Spieler 2:*</label>
+              <input type="text" formControlName="playerTwo" class="form-control" id="playerId2" placeholder="Spieler 2">
+              <div *ngIf="!form.controls.playerTwo.valid && form.controls.playerTwo.touched" class="has-error">
+                <span class="help-block">Der Spielername muss mindestens 3 Buchstaben haben.</span>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group"
+                      [ngClass]="{'has-error':!form.controls.playerThree.valid && form.controls.playerThree.touched}">
+              <label for="playerId3">Spieler 3:*</label>
+              <input type="text" formControlName="playerThree" class="form-control" id="playerId3" placeholder="Spieler 3">
+              <div *ngIf="!form.controls.playerThree.valid && form.controls.playerThree.touched" class="has-error">
+                <span class="help-block">Der Spielername muss mindestens 3 Buchstaben haben.</span>
+              </div>
+            </fieldset>
+
+            <p>
+              <button class="btn btn-success" type="submit" [disabled]="!form.valid">Anmelden</button>
+              <span *ngIf="!form.valid" class="help-block">Fülle alle Felder aus um die Anmeldung abzusenden.</span>
+            </p>
+
+          </form>
+        </div>
+
+        <div *ngIf="currentState == asyncStates.ASYNC_SUCCESSFUL">
+          <h1>Danke fürs anmelden. Schau in deine Email um die Registrierung abzuschliessen.</h1>
+        </div>
+
+        <div *ngIf="currentState == asyncStates.ASYNC_PENDING">
+          <h1>Der Anmeldevogel fliegt...</h1>
+        </div>
+      </div>
   </div>
 </div>
 

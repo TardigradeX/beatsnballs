@@ -71,15 +71,12 @@ end
 =end
 
 options "/*" do
+
   response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
 
   response.headers["Access-Control-Allow-Headers"] = "uuid, Content-Type, Cache-Control, Accept,Access-Control-Allow-Origin"
 
   200
-end
-
-get '/' do
-  send_file './public/index.html'
 end
 
 get '/teams' do
@@ -88,6 +85,7 @@ get '/teams' do
   @teams.each do |team|
     puts team.players.inspect
   end
+
   @teams.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
 end
 
@@ -113,7 +111,6 @@ post '/teams' do
               :from => "beatsnballs@mail.de",
               :subject => "Beats n Balls Registrierung",
               :html_body => email_body
-
 
     response.status = 201
     @team.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])

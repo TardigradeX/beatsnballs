@@ -3,13 +3,15 @@
  */
 export class Team {
   private team_name: string;
+  private email: string;
   private rank: number;
   private players: Player[];
 
-  constructor(team_name: string, rank: number, players: Player[]) {
+  constructor(team_name: string, email:string, rank: number, players: Player[]) {
     this.team_name = team_name;
     this.rank = rank;
     this.players = players;
+    this.email = email;
   }
 
 
@@ -20,6 +22,10 @@ export class Team {
   get Rank(): number{
       return this.rank;
       }
+
+  get Email(): string{
+    return this.email;
+  }
 
   get Players(): Player[]{
       return this.players;
