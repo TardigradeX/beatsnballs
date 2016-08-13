@@ -20,7 +20,7 @@
 #accordion li div.content{
     display: none;
     padding: 10px;
-    background: #f6efa6;
+    background: #D2B48C;
     border: 1px solid #42cafd;
 }
 #accordion li:hover div.content{
