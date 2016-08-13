@@ -51,6 +51,7 @@ const barrels: string[] = [
   'app/registration',
   'app/activated',
   'app/delete',
+  'app/welcome',
   /** @cli-barrel */
 ];
 

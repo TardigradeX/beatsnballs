@@ -4,15 +4,17 @@ import { RanksComponent } from '../ranks/ranks.component';
 import { RegistrationComponent } from '../registration/registration.component';
 import { ActivatedComponent } from '../activated/activated.component';
 import { DeleteComponent } from '../delete/delete.component';
+import {WelcomeComponent} from '../welcome/welcome.component';
 
 export const APP_ROUTES: RouterConfig = [
 
-  {path: '', redirectTo: '/teams', terminal: true},
+  {path: '', redirectTo: '/welcome', terminal: true},
   {path: 'teams', component: TeamsComponent},
   {path: 'ranks', component: RanksComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'activation', component: ActivatedComponent},
-  {path: 'delete', component: DeleteComponent}
+  {path: 'delete', component: DeleteComponent},
+  {path: 'welcome', component: WelcomeComponent}
 
 ];
 
