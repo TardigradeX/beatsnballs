@@ -4,7 +4,7 @@ require 'bundler'
 require './secret_constants'
 Bundler.require
 
-set :environment, :development
+set :environment, :production
 
 set :allow_origin, :any
 set :allow_methods, [:get, :post, :options, :put, :delete]
@@ -147,9 +147,14 @@ put '/teams/:id' do
 
   params_json = JSON.parse(request.body.read)
 
-
   if params_json['uuid'] == @team.uuid
     @team.activated = true;
+    email_body = erb :admin_mail, :locals => {name:@team.team_name, id: @team.id, uuid:@team.uuid}
+
+    Pony.mail :to => "beatsnballs@mail.de",
+              :from => "beatsnballs@mail.de",
+              :subject => "Neue Mannschaft Gemeldet",
+              :html_body => email_body
   end
 
   if @team.activated and @team.save
@@ -162,10 +167,12 @@ put '/teams/:id' do
 end
 
 
-# If there are no Things in the database, add a few.
-if Team.count == 0
-  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid =>"testuuid", :activated => true)
-  team1.players << Player.create(:player_name => "Helle")
-  team1.players << Player.create(:player_name => "Franz")
-  team1.save
+if (ENV == 'development')
+  if Team.count == 0
+    team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid => "testuuid", :activated => true)
+    team1.players << Player.create(:player_name => "Helle")
+    team1.players << Player.create(:player_name => "Franz")
+    team1.save
+  end
 end
+
