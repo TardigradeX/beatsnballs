@@ -4,8 +4,6 @@ require 'bundler'
 require './secret_constants'
 Bundler.require
 
-set :environment, :production
-
 set :allow_origin, :any
 set :allow_methods, [:get, :post, :options, :put, :delete]
 set :expose_headers, ['Content-Type', 'uuid']
@@ -14,11 +12,10 @@ configure do
   enable :cross_origin
 end
 
-if (ENV == 'production')
-  DataMapper.setup(:default, 'sqlite://#{Dir.pwd}/production.sqlite')
-else
-  DataMapper.setup(:default, 'sqlite::memory:')
-end
+
+DataMapper.setup(:default, 'sqlite:/home/daniel/code/production.sqlite')
+#DataMapper.setup(:default, 'sqlite::memory:')
+
 
 #DATA Models
 class Team
@@ -53,13 +50,13 @@ DataMapper.auto_upgrade!
 Pony.options = {
     :via => :smtp,
     :via_options => {
-        :address              => 'smtp.mail.de',
-        :port                 => '587',
+        :address => 'smtp.mail.de',
+        :port => '587',
         :enable_starttls_auto => true,
-        :headers => { 'Content-Type' => 'text/html' },
-        :user_name            => SecretConstants::MAIL_USER,
-        :password             => SecretConstants::MAIL_PASSWORD,
-        :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
+        :headers => {'Content-Type' => 'text/html'},
+        :user_name => SecretConstants::MAIL_USER,
+        :password => SecretConstants::MAIL_PASSWORD,
+        :authentication => :plain, # :plain, :login, :cram_md5, no auth by default
     }
 }
 
@@ -86,7 +83,7 @@ get '/teams' do
     puts team.players.inspect
   end
 
-  @teams.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
+  @teams.to_json(:only => [:team_name, :created_at, :rank], methods: [:players])
 end
 
 # CREATE: Route to create a new Team
@@ -101,11 +98,11 @@ post '/teams' do
 
   if @team.save
 
-    @registerURL = SecretConstants::ANGULAR_SERVER  + "/activation;uuid="  + @team.uuid + ";id=" + @team.id.to_s
+    @registerURL = SecretConstants::ANGULAR_SERVER + "/activation;uuid=" + @team.uuid + ";id=" + @team.id.to_s
 
-    @deleteURL = SecretConstants::ANGULAR_SERVER  + "/delete;uuid="  + @team.uuid + ";id="  + @team.id.to_s
+    @deleteURL = SecretConstants::ANGULAR_SERVER + "/delete;uuid=" + @team.uuid + ";id=" + @team.id.to_s
 
-    email_body = erb :mail, :locals => {name:@team.team_name, regURI: @registerURL, delURI:@deleteURL}
+    email_body = erb :mail, :locals => {name: @team.team_name, regURI: @registerURL, delURI: @deleteURL}
 
     Pony.mail :to => @team.email,
               :from => "beatsnballs@mail.de",
@@ -113,7 +110,7 @@ post '/teams' do
               :html_body => email_body
 
     response.status = 201
-    @team.to_json(:only => [:team_name, :created_at, :rank], methods:[:players])
+    @team.to_json(:only => [:team_name, :created_at, :rank], methods: [:players])
   else
     halt 500
   end
@@ -139,7 +136,6 @@ delete '/teams/:id' do
 end
 
 
-
 # PUT: Activate a Team
 put '/teams/:id' do
   content_type :json
@@ -149,7 +145,7 @@ put '/teams/:id' do
 
   if params_json['uuid'] == @team.uuid
     @team.activated = true;
-    email_body = erb :admin_mail, :locals => {name:@team.team_name, id: @team.id, uuid:@team.uuid}
+    email_body = erb :admin_mail, :locals => {name: @team.team_name, id: @team.id, uuid: @team.uuid}
 
     Pony.mail :to => "beatsnballs@mail.de",
               :from => "beatsnballs@mail.de",
@@ -159,7 +155,7 @@ put '/teams/:id' do
 
   if @team.activated and @team.save
     response.status = 200
-    @team.to_json(:only => [:team_name, :created_at, :rank, :activated], methods:[:players])
+    @team.to_json(:only => [:team_name, :created_at, :rank, :activated], methods: [:players])
   else
     halt 500
   end
@@ -167,12 +163,13 @@ put '/teams/:id' do
 end
 
 
-if (ENV == 'development')
-  if Team.count == 0
-    team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid => "testuuid", :activated => true)
-    team1.players << Player.create(:player_name => "Helle")
-    team1.players << Player.create(:player_name => "Franz")
-    team1.save
-  end
+=begin
+if Team.count == 0
+  team1 = Team.create(:team_name => "Winners", :email => "test@hello.com", :uuid => "testuuid", :activated => true)
+  team1.players << Player.create(:player_name => "Helle")
+  team1.players << Player.create(:player_name => "Franz")
+  team1.save
 end
+=end
+
 
