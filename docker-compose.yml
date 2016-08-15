@@ -4,6 +4,11 @@ app:
   ports:
   - "4567:4567"
 
+  volumes:
+
+    # Specify an absolute path mapping
+    - /var/opt:/var/opt
+
   environment:
     - RAILS_ENV=production
     - RACK_ENV=production
