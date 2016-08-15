@@ -145,7 +145,7 @@ put '/teams/:id' do
 
   if params_json['uuid'] == @team.uuid
     @team.activated = true;
-    email_body = erb :admin_mail, :locals => {name: @team.team_name, id: @team.id, uuid: @team.uuid}
+    email_body = erb :admin_mail, :locals => {name: @team.team_name, email:@team.email, id: @team.id, uuid: @team.uuid}
 
     Pony.mail :to => "beatsnballs@mail.de",
               :from => "beatsnballs@mail.de",
