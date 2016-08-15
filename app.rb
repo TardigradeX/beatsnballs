@@ -13,7 +13,7 @@ configure do
 end
 
 
-DataMapper.setup(:default, 'sqlite:/home/daniel/code/production.sqlite')
+DataMapper.setup(:default, 'sqlite:/opt/production.sqlite')
 #DataMapper.setup(:default, 'sqlite::memory:')
 
 

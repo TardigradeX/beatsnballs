@@ -1,0 +1,9 @@
+app:
+  build: .
+  command: bundle exec ruby app.rb
+  ports:
+  - "4567:4567"
+
+  environment:
+    - RAILS_ENV=production
+    - RACK_ENV=production

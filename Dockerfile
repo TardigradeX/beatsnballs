@@ -1,22 +1,13 @@
-FROM ruby:2.2.1
-MAINTAINER Bugs Bunny <bbunny@rubyplus.com>
+FROM ruby:2.2
 
-RUN apt-get update && \
-    apt-get install -y net-tools
+RUN apt-get update -qq && apt-get install -y build-essential
 
-# Install gems
 ENV APP_HOME /app
-ENV HOME /root
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
-COPY Gemfile* $APP_HOME/
+
+ADD Gemfile* $APP_HOME/
 RUN bundle install
 
-# Upload source
-COPY . $APP_HOME
-
-# Start server
-ENV PORT 4567
-EXPOSE 4567
-CMD ["ruby", "app.rb"]
+ADD . $APP_HOME
 
