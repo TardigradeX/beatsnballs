@@ -9,7 +9,8 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  'ng2-bootstrap': 'vendor/ng2-bootstrap'
+  'ng2-bootstrap': 'vendor/ng2-bootstrap',
+  'ng2-dropdown': 'vendor/ng2-dropdown'
 };
 
 /** User packages configuration. */
@@ -19,8 +20,9 @@ const packages: any = {
     format: 'cjs',
     defaultExtension: 'js',
     main: 'ng2-bootstrap.js'
+  },
 
-  }
+  'ng2-dropdown': { 'main': 'index.js', 'defaultExtension': 'js' }
 
 };
 

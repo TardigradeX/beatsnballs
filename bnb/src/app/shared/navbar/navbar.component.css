@@ -15,4 +15,15 @@
   color:#66b3ba;
 }
 
+.navbar-custom .navbar-toggle {
+  border-color: transparent; /* Removes border color */
+  float: left; /* Move navbar toggle to left */
+}
+.navbar-custom .navbar-toggle .icon-bar {
+  background-color: #66b3ba; /* Changes regular toggle color */
+}
+.navbar-custom .navbar-toggle .icon-bar:hover {
+  background-color: #66b3ba; /* Changes toggle color on hover */
+}
+
 
