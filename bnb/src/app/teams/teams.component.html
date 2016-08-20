@@ -3,26 +3,44 @@
     <div class="container">
       <div class="jumbotron">
         <div class="row">
-        <div class=col-sm-4>
-          <h2>Teams: </h2>
-        </div>
-        <div class=col-sm-6>
-          <div *ngFor="let team of loadedTeams">
-            <ul id="accordion">
-              <li>
-                <h2>{{team.team_name}}</h2>
-                <div class="content">
-                  <ol>
-                    <div *ngFor="let player of team.players">
-                      <li>{{player.player_name}}</li>
+          <div class=col-sm-4>
+            <h2>Teams: </h2>
+          </div>
+          <div class=col-sm-6>
+            <div *ngFor="let team of loadedTeams; let i = index">
+              <div *ngIf="i <= 15">
+                <ul id="accordion">
+                  <li>
+                    <h2>{{team.team_name}}</h2>
+                    <div class="content">
+                      <ol>
+                        <div *ngFor="let player of team.players">
+                          <li>{{player.player_name}}</li>
+                        </div>
+                      </ol>
                     </div>
-                  </ol>
-                </div>
-              </li>
-            </ul>
+                  </li>
+                </ul>
+              </div>
+              <div *ngIf="i > 15">
+                <ul id="accordion_bad">
+                  <li>
+                    <h2>{{team.team_name}}</h2>
+                    <div class="content">
+                      <ol>
+                        <div *ngFor="let player of team.players">
+                          <li>{{player.player_name}}</li>
+                        </div>
+                      </ol>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            * Die Maximale Anzahl Mannschaften beträgt 16. Falls mehr Meldungen eintreffen
+            sind nur die ersten 16 Mannschaften Spielberechtigt. Die nicht mehr berechtigten sind Rot markiert.
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>

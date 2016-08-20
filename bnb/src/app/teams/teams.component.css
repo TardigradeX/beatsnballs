@@ -2,7 +2,6 @@
     margin-top: 80px;
 }
 #accordion{
-    width: 400px;
     margin: 0px;
     padding: 3px;
     list-style: none;
@@ -26,6 +25,32 @@
 #accordion li:hover div.content{
     border-radius: 6px;
     display: inherit;
+}
+
+#accordion_bad{
+  margin: 0px;
+  padding: 3px;
+  list-style: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#accordion_bad h2{
+  border-radius: 6px;
+  font-size: 12pt;
+  margin: 1px;
+  padding: 10px;
+  background: #ea6342;
+  border: 2px solid #ba031f;
+}
+#accordion_bad li div.content{
+  display: none;
+  padding: 10px;
+  background: #d22e2d;
+  border: 1px solid #fda373;
+}
+#accordion_bad li:hover div.content{
+  border-radius: 6px;
+  display: inherit;
 }
 
 .beats-background {

@@ -37,7 +37,7 @@ export class TeamsComponent implements OnInit {
         return result;
       })
       .subscribe(
-        responseData => this.loadedTeams = responseData,
+        responseData => this.loadedTeams = responseData.reverse(),
         error => console.log('NO DATA AVAILABLE'));
 
   }
